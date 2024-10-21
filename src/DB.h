@@ -21,7 +21,7 @@ public:
         }
     }
 
-    // SELECTы
+    // ВОзможнотсь сделать любой запрос в таблицу
     PGresult* executeQuery(const char *query) {
         PGresult *res = PQexec(conn, query);
         if (PQresultStatus(res) != PGRES_TUPLES_OK) {
@@ -88,26 +88,28 @@ public:
 
     void printDB(PGresult* res){
         if (res) {
-        int rows = PQntuples(res);
-        int cols = PQnfields(res);
+            int rows = PQntuples(res);
+            int cols = PQnfields(res);
 
-        for (int i = 0; i < cols; i++) {
-            std::cout << PQfname(res, i) << "\t";
-        }
-        std::cout << std::endl;
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                std::cout << PQgetvalue(res, i, j) << "\t";
+            for (int i = 0; i < cols; i++) {
+                std::cout << PQfname(res, i) << "\t";
             }
             std::cout << std::endl;
+
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    std::cout << PQgetvalue(res, i, j) << "\t";
+                }
+                std::cout << std::endl;
+            }
+
+            PQclear(res);
         }
 
-        PQclear(res);
     }
-
+    PGconn* getConn() const {
+        return conn;
     }
-
 
     // Деструктор: закрывает соединение
     ~Database() {
