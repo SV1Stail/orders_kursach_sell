@@ -1,0 +1,7 @@
+sudo apt-get install libpq-dev
+g++ -o db_example main.cpp -I/usr/include/postgresql -lpq
+
+sudo su - postgres -c "createdb backdev"
+grant all privileges on database backdev to user_db;
+psql -U user_db -d backdev -h localhost
+passw 1234
